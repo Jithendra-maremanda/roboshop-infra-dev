@@ -9,7 +9,7 @@ resource "aws_instance" "bastion" {
     var.instance_tag,
     local.common_tags,
     {
-      Name = "${var.project}-${var.environment}"
+      Name = "${var.project}-${var.environment}-bastion"
     }
   )
 }
