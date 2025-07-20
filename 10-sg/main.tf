@@ -97,7 +97,7 @@ resource "aws_security_group_rule" "vpn_943" {
   security_group_id = module.vpn.sg_id
 }
 
-#backend alb accepting connection from the my bastion host on port no 80
+#backend alb accepting connection from the my backend_alb_vpn  host on port no 80
 
 resource "aws_security_group_rule" "backend_alb_vpn" {
   type              = "ingress"
