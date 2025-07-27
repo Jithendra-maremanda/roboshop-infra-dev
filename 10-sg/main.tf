@@ -15,8 +15,6 @@ module "bastion" {
     environment     = var.environment
     sg_name         = var.bastion_sg_name
     sg_description  = var.bastion_sg_description
-    
-    
 }
 
 module "backend_alb" {
@@ -24,12 +22,11 @@ module "backend_alb" {
     vpc_id          = local.vpc_id
     project         = var.project
     environment     = var.environment
-    sg_name         = "backend_alb"
+    sg_name         = "backend-alb"
     sg_description  = "for backend_alb"
     
     
 }
-
 module "vpn" {
     source          = "git::https://github.com/Jithendra-maremanda/terraform-aws-security-group.git?ref=main"
     vpc_id          = local.vpc_id
@@ -37,7 +34,6 @@ module "vpn" {
     environment     = var.environment
     sg_name         = "vpn"
     sg_description  = "for vpn"
-    
     
 }
 
