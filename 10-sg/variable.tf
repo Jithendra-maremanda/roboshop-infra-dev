@@ -28,3 +28,7 @@ variable "sg_tags" {
     default = {}
   
 }
+
+variable "mongodb_ports_vpn" {
+  default = [22,27017]
+}

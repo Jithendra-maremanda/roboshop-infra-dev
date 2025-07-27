@@ -37,6 +37,16 @@ module "vpn" {
     
 }
 
+
+module "mongodb" {
+    source          = "git::https://github.com/Jithendra-maremanda/terraform-aws-security-group.git?ref=main"
+    vpc_id          = local.vpc_id
+    project         = var.project
+    environment     = var.environment
+    sg_name         = "mongodb"
+    sg_description  = "for mongodb"
+    
+}
 #bastion security group rule to allow traffic from laptop
 resource "aws_security_group_rule" "bastion_laptop" {
   type              = "ingress"
@@ -102,4 +112,15 @@ resource "aws_security_group_rule" "backend_alb_vpn" {
   protocol          = "tcp"
   source_security_group_id = module.vpn.sg_id
   security_group_id = module.backend_alb.sg_id
+}
+
+
+resource "aws_security_group_rule" "mongodb_vpn_ssh" {
+  count = length(var.mongodb_ports_vpn)
+  type              = "ingress"
+  from_port         =var.mongodb_ports_vpn[count.index]
+  to_port           =var.mongodb_ports_vpn[count.index]
+  protocol          = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id = module.mongodb.sg_id
 }
