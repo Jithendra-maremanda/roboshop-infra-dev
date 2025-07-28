@@ -8,10 +8,10 @@ variable "environment" {
 }
 
 
-variable "zone_id" {
-    default = "Z032558618100M4EJX8X4"
-}
+# variable "zone_id" {
+#     default = "Z07875261XFWESB6HKZDD"
+# }
 
-variable "zone_name" {
-    default = "stansrobotshop.site"
-}
+# variable "zone_name" {
+#     default = "stansrobotshop.site"
+# }
