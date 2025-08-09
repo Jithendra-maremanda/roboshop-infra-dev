@@ -45,6 +45,17 @@ module "rabbitmq" {
     vpc_id = local.vpc_id
 }
 
+module "catalogue" {
+    #source = "../../terraform-aws-securitygroup"
+    source = "git::https://github.com/daws-84s/terraform-aws-securitygroup.git?ref=main"
+    project = var.project
+    environment = var.environment
+
+    sg_name = "catalogue"
+    sg_description = "for catalogue"
+    vpc_id = local.vpc_id
+}
+
 # ----------------------------------------------------------------------------------
 module "frontend" {
     source          = "git::https://github.com/Jithendra-maremanda/terraform-aws-security-group.git?ref=main"
@@ -104,6 +115,7 @@ resource "aws_security_group_rule" "backend_alb_bastion" {
   source_security_group_id = module.bastion.sg_id
   security_group_id = module.backend_alb.sg_id
 }
+
 
 resource "aws_security_group_rule" "vpn_ssh" {
   type              = "ingress"
@@ -191,4 +203,50 @@ resource "aws_security_group_rule" "rabbitmq_vpn" {
   protocol          = "tcp"
   source_security_group_id = module.vpn.sg_id
   security_group_id = module.rabbitmq.sg_id
+}
+
+#Catalogue
+resource "aws_security_group_rule" "catalogue_vpn_ssh" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id = module.catalogue.sg_id
+}
+
+resource "aws_security_group_rule" "catalogue_bastion_ssh" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  source_security_group_id = module.bastion.sg_id
+  security_group_id = module.catalogue.sg_id
+}
+
+resource "aws_security_group_rule" "catalogue_vpn_http" {
+  type              = "ingress"
+  from_port         = 8080
+  to_port           = 8080
+  protocol          = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id = module.catalogue.sg_id
+}
+
+resource "aws_security_group_rule" "catalogue_backend_alb" {
+  type              = "ingress"
+  from_port         = 8080
+  to_port           = 8080
+  protocol          = "tcp"
+  source_security_group_id = module.backend_alb.sg_id
+  security_group_id = module.catalogue.sg_id
+}
+
+resource "aws_security_group_rule" "mongodb_catalogue" {
+  type              = "ingress"
+  from_port         = 27017
+  to_port           = 27017
+  protocol          = "tcp"
+  source_security_group_id = module.catalogue.sg_id
+  security_group_id = module.mongodb.sg_id
 }
