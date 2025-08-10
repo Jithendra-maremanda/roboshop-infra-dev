@@ -8,7 +8,7 @@ resource "aws_lb_target_group" "catalogue" {
     health_check {
         path = "/health"
         interval = 5
-        timeout = 5
+        timeout = 3
         healthy_threshold = 2
         matcher = "200-299"
         port = 8080
