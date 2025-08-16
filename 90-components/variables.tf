@@ -1,13 +1,19 @@
 variable "components" {
   default = {
-    cart ={
+    catalog = {
+        rule_priority = 20
+    }
+    user={
         rule_priority = 30
     }
-    shipping={
+    cart ={
         rule_priority = 40
     }
-    payment={
+    shipping={
         rule_priority = 50
+    }
+    payment={
+        rule_priority = 60
     }
     frontend={
         rule_priority = 10
